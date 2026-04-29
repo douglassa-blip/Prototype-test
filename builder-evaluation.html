@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Builder Observability · Protótipo</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <style>
+      :root { --bg:#f3f5f8; --panel:#ffffff; --line:#dde3ea; --txt:#1f2937; --muted:#6b7280; --blue:#2563eb; --green:#16a34a; }
+      * { box-sizing:border-box; }
+      body { margin:0; background:var(--bg); color:var(--txt); font-family: Inter, system-ui, -apple-system, sans-serif; }
+      .topbar { height:64px; background:#101828; color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 20px; }
+      .topbar h1 { font-size:18px; margin:0; font-weight:700; }
+      .topbar small { color:#aab5c2; }
+      .actions { display:flex; gap:8px; }
+      .btn { border:1px solid #2d3a4b; background:#1b2433; color:#fff; border-radius:8px; padding:8px 12px; cursor:pointer; }
+      .btn.primary { background:#2563eb; border-color:#2563eb; }
+      .btn.good { background:#14532d; border-color:#166534; }
+      .workspace { display:grid; grid-template-columns: 320px 1fr 420px; height: calc(100vh - 64px); }
+      .col { border-right:1px solid var(--line); background:var(--panel); min-width:0; display:flex; flex-direction:column; }
+      .col:last-child { border-right:0; }
+      .head { padding:16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+      .head h2 { margin:0; font-size:20px; }
+      .search { margin:12px 16px; border:1px solid var(--line); border-radius:10px; padding:10px; color:var(--muted); }
+      .list { overflow:auto; padding:0 0 8px; }
+      .session { padding:14px 16px; border-top:1px solid var(--line); cursor:pointer; }
+      .session.active { background:#eef4ff; }
+      .session .title { font-weight:700; }
+      .muted { color:var(--muted); font-size:13px; }
+      .timeline-wrap { padding:14px 20px; overflow:auto; display:grid; gap:12px; }
+      .bubble { max-width:70%; border-radius:12px; padding:10px 12px; border:1px solid var(--line); background:#f9fafb; }
+      .bubble.user { margin-left:auto; background:#dbeafe; border-color:#bfdbfe; }
+      .bubble.bot { margin-right:auto; }
+      .bubble .id { display:block; color:#2563eb; font-size:12px; margin-bottom:4px; }
+      .event-panel { overflow:auto; padding:8px 0 0; }
+      .event { padding:12px 16px; border-top:1px solid var(--line); }
+      .event strong { display:block; }
+      .event .meta { color:#475569; font-size:13px; }
+      .event.highlight { background:#ecfeff; }
+      .composer { border-top:1px solid var(--line); padding:10px; display:flex; gap:8px; background:#fff; }
+      .composer input { flex:1; border:1px solid #cbd5e1; border-radius:8px; padding:10px; }
+      .composer button { border:0; border-radius:8px; background:#0ea5e9; color:#fff; padding:0 14px; font-weight:700; }
+      .tags { display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px; border-bottom:1px solid var(--line); }
+      .tag { border:1px solid #c7d2fe; color:#3730a3; background:#eef2ff; padding:4px 8px; border-radius:999px; font-size:12px; cursor:pointer; }
+      .tag.active { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
+      @media (max-width: 1280px) { .workspace { grid-template-columns: 1fr; height:auto; } .col{min-height:320px;} }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Logs e Eventos · Modo Avaliação</h1>
+        <small>Teste manual e inspeção técnica no mesmo contexto</small>
+      </div>
+      <div class="actions">
+        <button class="btn" id="syncBtn">Sync ON</button>
+        <button class="btn" id="resetBtn">Reiniciar sessão</button>
+        <button class="btn primary" id="variantBtn">Duplicar teste</button>
+        <button class="btn good" id="clearFilterBtn">Limpar filtro</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="col">
+        <div class="head"><h2>Conversas</h2><span class="muted" id="sessionCount">0 sessões</span></div>
+        <div class="search">Buscar contato…</div>
+        <div class="list" id="sessionList"></div>
+      </section>
+
+      <section class="col">
+        <div class="head"><h2>Conversa</h2><span class="muted" id="selectedHint">Selecione uma sessão</span></div>
+        <div class="timeline-wrap" id="timeline"></div>
+        <div class="composer">
+          <input id="chatInput" placeholder="Digite mensagem para teste manual" />
+          <button id="sendBtn">Enviar</button>
+        </div>
+      </section>
+
+      <section class="col">
+        <div class="head"><h2>Evento selecionado</h2><span class="muted" id="eventCount">0 eventos</span></div>
+        <div class="tags" id="filters">
+          <button class="tag active" data-filter="all">Todos</button>
+          <button class="tag" data-filter="TrackEvent">TrackEvent</button>
+          <button class="tag" data-filter="SendMessage">SendMessage</button>
+          <button class="tag" data-filter="Error">Error</button>
+        </div>
+        <div class="event-panel" id="eventList"></div>
+      </section>
+    </main>
+
+    <script src="assets/builder-evaluation.js"></script>
+  </body>
+</html>
