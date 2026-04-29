@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blip Builder · Modo Avaliação</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <style>
+      body { background:#0b1020; color:#e5e7eb; }
+      .eval-shell { padding: 16px; display:grid; gap:12px; height:100vh; }
+      .eval-top { display:flex; justify-content:space-between; align-items:center; background:#111827; border:1px solid #1f2937; border-radius:12px; padding:12px 16px; }
+      .badge { background:#1d4ed8; color:white; border-radius:999px; padding:4px 10px; font-size:12px; }
+      .controls { display:flex; gap:8px; align-items:center; }
+      .controls button { border:1px solid #334155; background:#1f2937; color:#e5e7eb; border-radius:8px; padding:8px 10px; cursor:pointer; }
+      .controls .primary { background:#2563eb; border-color:#2563eb; }
+      .layout { flex:1; display:grid; grid-template-columns:280px 1fr 420px; gap:12px; min-height:0; }
+      .panel { background:#111827; border:1px solid #1f2937; border-radius:12px; min-height:0; display:flex; flex-direction:column; }
+      .panel h3 { margin:0; padding:12px 14px; border-bottom:1px solid #1f2937; font-size:15px; }
+      .list, .timeline, .events, .chat-log { overflow:auto; padding:12px; display:grid; gap:10px; }
+      .conv-item { padding:10px; border:1px solid #334155; border-radius:10px; background:#0f172a; }
+      .msg { padding:10px; border-radius:10px; max-width:80%; }
+      .msg.user { background:#1d4ed8; margin-left:auto; }
+      .msg.bot { background:#1f2937; }
+      .event { border:1px solid #334155; border-radius:8px; padding:10px; display:grid; gap:4px; }
+      .event small { color:#93c5fd; }
+      .chat-input { border-top:1px solid #1f2937; padding:10px; display:flex; gap:8px; }
+      .chat-input input { flex:1; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; padding:10px; }
+      .chat-input button { border:0; border-radius:8px; background:#22c55e; color:#052e16; padding:10px 14px; font-weight:700; cursor:pointer; }
+      .hint { padding:0 12px 12px; color:#94a3b8; font-size:12px; }
+      @media (max-width: 1200px) { .layout{ grid-template-columns:1fr; } }
+    </style>
+  </head>
+  <body>
+    <main class="eval-shell">
+      <header class="eval-top">
+        <div>
+          <strong>Builder · Avaliação contínua</strong>
+          <span class="badge">Teste + Logs Vinculados</span>
+        </div>
+        <div class="controls">
+          <button id="toggleSync">Sync em tempo real: ON</button>
+          <button id="resetSession">Reiniciar sessão</button>
+          <button class="primary" id="newVariant">Duplicar teste</button>
+        </div>
+      </header>
+
+      <section class="layout">
+        <aside class="panel">
+          <h3>Sessões de teste</h3>
+          <div class="list" id="sessions"></div>
+        </aside>
+
+        <section class="panel">
+          <h3>Timeline da conversa</h3>
+          <div class="timeline" id="timeline"></div>
+          <p class="hint">Clique em uma mensagem para filtrar eventos correlacionados por ID.</p>
+        </section>
+
+        <section class="panel">
+          <h3>Chat dockado + Eventos técnicos</h3>
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-input">
+            <input id="chatInput" placeholder="Digite uma mensagem de teste" />
+            <button id="sendBtn">Enviar</button>
+          </div>
+          <div class="events" id="events"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="assets/builder-evaluation.js"></script>
+  </body>
+</html>
